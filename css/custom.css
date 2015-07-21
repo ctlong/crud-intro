@@ -1,0 +1,25 @@
+nav {
+  background-color: #607D8B;
+}
+
+nav > ul > li {
+  display: inline-block;
+  list-style-type: none;
+  float: right;
+  font-size: 20px;
+  padding: 10px;
+  margin: 10px 10px 10px 0px;
+  border-left: 1px solid black;
+  color: white;
+}
+
+h1 {
+  float: left;
+  margin: 6px;
+  padding: 6px;
+  color: white;
+}
+
+.function {
+  background-color: #9E9E9E
+}
