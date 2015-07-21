@@ -15,21 +15,23 @@
       <nav class="col-xs-12">
         <h1>Crud API</h1>
         <ul>
-          <li><button class="btn nav-item">Get</button></li>
-          <li><button class="btn nav-item">Put</button></li>
-          <li><button class="btn nav-item">Delete</button></li>
+          <li class="nav-item" id="Get">Get</li>
+          <li class="nav-item" id="Put">Put</li>
+          <li class="nav-item" id="Delete">Delete</li>
+          <li class="nav-item" id="Post">Post</li>
         </ul>
       </nav>
       <section class="col-xs-12 function">
-
+        <p>Id: <input type="text" placeholder="id"></p>
+        <button class="btn btn-primary">GET POST</button>
       </section>
       <section class="col-xs-12 list-all">
         <table id="posts" class="table">
           <tr id="categories">
-            <td>User</td>
-            <td>Title</td>
-            <td>Text</td>
-            <td>Id</td>
+            <td><b>User</b></td>
+            <td><b>Title</b></td>
+            <td><b>Text</b></td>
+            <td><b>Id</b></td>
           </tr>
         </table>
       </section>

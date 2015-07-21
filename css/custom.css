@@ -1,3 +1,7 @@
+.wrapper {
+  background-color: #CFD8DC;
+}
+
 nav {
   background-color: #607D8B;
 }
@@ -20,6 +24,38 @@ h1 {
   color: white;
 }
 
+#Get {
+  background-color: #CFD8DC;
+  color: black;
+}
+
 .function {
-  background-color: #9E9E9E
+  background-color: #727272;
+  padding: 10px 5px;
+  margin-left: 10px;
+}
+
+.function > p {
+  display: inline-block;
+  margin: 10px;
+  color: white;
+}
+
+.function > p > input {
+  color: black;
+}
+
+.btn-primary {
+  font-size: 13px;
+  padding: 5px;
+  margin-left: 10px;
+}
+
+#posts {
+  background-color: #FFFFFF;
+}
+
+#categories {
+  background-color: #9E9E9E;
+  font-size: 15px;
 }
