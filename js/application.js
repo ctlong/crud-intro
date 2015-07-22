@@ -13,6 +13,7 @@ $(document).ready(function() {
     var constructHtml = function(response, keys) {
       var html = '';
       keys.forEach(function(key) {
+        // console.log(response[key]['_id']);
         x.posts.push(response[key]['_id']);
         html += '<tr class="list-item">';
         html +=   '<td>';
@@ -28,7 +29,7 @@ $(document).ready(function() {
         html +=     response[key]['_id'];
         html +=   '</td>';
       });
-      console.log(x.posts);
+      // console.log(x.posts);
       return html;
     }
 
@@ -50,6 +51,7 @@ $(document).ready(function() {
     var x = this;
 
     var constructHtml = function(id) {
+      // console.log(x.posts);
       x.posts.push(id);
       var html = '';
       html += '<tr class="list-item">';
@@ -194,7 +196,6 @@ $(document).ready(function() {
   }
 
   Posts.prototype.put = function(user,title,text,id) {
-    this.newPosts.push(title);
 
     var success = function(response) {
     }
