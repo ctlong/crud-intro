@@ -3,14 +3,17 @@ $(document).ready(function() {
 
 
   var Posts = function() {
-    this.newPosts = [];
+    this.posts = [];
   }
 
   Posts.prototype.getAll = function() {
+    var x = this;
+    x.posts = [];
 
     var constructHtml = function(response, keys) {
       var html = '';
       keys.forEach(function(key) {
+        x.posts.push(response[key]['_id']);
         html += '<tr class="list-item">';
         html +=   '<td>';
         html +=     response[key]['user'];
@@ -25,6 +28,7 @@ $(document).ready(function() {
         html +=     response[key]['_id'];
         html +=   '</td>';
       });
+      console.log(x.posts);
       return html;
     }
 
@@ -43,9 +47,10 @@ $(document).ready(function() {
   }
 
   Posts.prototype.add = function(user,title,text) {
-    this.newPosts.push(title);
+    var x = this;
 
     var constructHtml = function(id) {
+      x.posts.push(id);
       var html = '';
       html += '<tr class="list-item">';
       html +=   '<td>';
@@ -83,7 +88,53 @@ $(document).ready(function() {
     });
   }
 
+  Posts.prototype.tryName = function(name) {
+    
+    var constructHtml = function(response, keys) {
+      var html = '';
+      keys.forEach(function(key) {
+        html += '<tr class="list-item">';
+        html +=   '<td>';
+        html +=     response[key]['user'];
+        html +=   '</td>';
+        html +=   '<td>';
+        html +=     response[key]['title'];
+        html +=   '</td>';
+        html +=   '<td>';
+        html +=     response[key]['text'];
+        html +=   '</td>';
+        html +=   '<td>';
+        html +=     response[key]['_id'];
+        html +=   '</td>';
+      });
+      return html;
+    }
+
+    var success = function(response) {
+      var keys = Object.keys(response);
+      var html = constructHtml(response, keys);
+      $('.list-item').remove();
+      $('#posts').append(html);
+      $('.function p').remove();
+      $('button').text('RESET');
+    }
+
+    var error = function(response) {
+      $('.function').prepend('<p>post does not exist</p>');
+      setTimeout(function() {$('.function p')[0].remove()}, 1000);
+    }
+
+    $.ajax({
+      type:'GET',
+      url:'http://ga-wdi-api.meteor.com/api/posts/search/'+name,
+      dataType:'json',
+      success: success,
+      error: error
+    });
+  }
+
   Posts.prototype.find = function(id) {
+    var x = this;
 
     var constructHtml = function(response) {
       var html = '';
@@ -111,19 +162,24 @@ $(document).ready(function() {
       $('button').text('RESET');
     }
 
+    var error = function(response) {
+      x.tryName(id);
+    }
+
     $.ajax({
       type: 'GET',
       url: 'http://ga-wdi-api.meteor.com/api/posts/'+id,
       dataType: 'json',
-      success: success
+      success: success,
+      error: error
     });
   }
 
   Posts.prototype.del = function(id) {
     
-    for(var a in this.newPosts) {
-      if(this.newPosts[a] == id) {
-        this.newPosts.splice(a,1)
+    for(var a in this.posts) {
+      if(this.posts[a] == id) {
+        this.posts.splice(a,1)
       }
     }
 
@@ -161,6 +217,8 @@ $(document).ready(function() {
   current.getAll();
 
   $(document).on('click','.nav-item', function() {
+    $('.list-item').remove();
+    current.getAll();
     if($(this).text() == 'Post' && cat != 'Post') {
       $('button').text('CREATE POST');
       $('.function p').remove();
@@ -179,11 +237,11 @@ $(document).ready(function() {
       $('#'+cat).css({'background-color' : '#607D8B', color : 'white'});
       cat = 'Post';
     } else if($(this).text() == 'Get' && cat != 'Get') {
-      $('button').text('GET POST');
+      $('button').text('GET POST(S)');
       $('.function p').remove();
       var html = ''
       html += '<p>';
-      html +=   'Id: <input type="text" placeholder="id">';
+      html +=   'Id/Name: <input type="text" placeholder="text">';
       html += '</p>'
       $('.function').prepend(html)
       $('#Get').css({'background-color' : '#CFD8DC', color : 'black'});
@@ -224,24 +282,31 @@ $(document).ready(function() {
   });
 
   $(document).on('click','button',function() {
-    if($('button').text() == 'RESET') {location.reload();}
     if(cat == 'Post') {
       var name = $('input')[0].value;
       var title = $('input')[1].value;
       var text = $('input')[2].value;
       current.add(name,title,text);
     } else if(cat == 'Get') {
-      current.find($('input').val());
+      if($('button').text() == 'RESET') {
+        location.reload();
+      } else {
+        current.find($('input').val());
+      }
     } else if(cat == 'Put') {
       var name = $('input')[0].value;
       var title = $('input')[1].value;
       var text = $('input')[2].value;
       var id = $('input')[3].value;
       current.put(name,title,text,id);
-      setTimeout(function() {location.reload();}, 1000);
+      setTimeout(function() {
+        $('.list-item').remove();
+        current.getAll();}, 1000);
     } else {
       current.del($('input').val());
-      setTimeout(function() {location.reload();}, 1000);
+      setTimeout(function() {
+        $('.list-item').remove();
+        current.getAll();}, 1000);
     }
   });
 
