@@ -1,9 +1,8 @@
 $(document).ready(function() {
-  var cat = 'Get';
-
 
   var Posts = function() {
     this.posts = [];
+    this.cur = 'Get';
   }
 
   Posts.prototype.getAll = function() {
@@ -214,13 +213,14 @@ $(document).ready(function() {
     });
   }
   
+  //initialize
   var current = new Posts();
   current.getAll();
 
   $(document).on('click','.nav-item', function() {
     $('.list-item').remove();
     current.getAll();
-    if($(this).text() == 'Post' && cat != 'Post') {
+    if($(this).text() == 'Post' && current.cur != 'Post') {
       $('button').text('CREATE POST');
       $('.function p').remove();
       var html = ''
@@ -235,9 +235,9 @@ $(document).ready(function() {
       html += '</p>'
       $('.function').prepend(html)
       $('#Post').css({'background-color' : '#CFD8DC', color : 'black'});
-      $('#'+cat).css({'background-color' : '#607D8B', color : 'white'});
-      cat = 'Post';
-    } else if($(this).text() == 'Get' && cat != 'Get') {
+      $('#'+current.cur).css({'background-color' : '#607D8B', color : 'white'});
+      current.cur = 'Post';
+    } else if($(this).text() == 'Get' && current.cur != 'Get') {
       $('button').text('GET POST(S)');
       $('.function p').remove();
       var html = ''
@@ -246,9 +246,9 @@ $(document).ready(function() {
       html += '</p>'
       $('.function').prepend(html)
       $('#Get').css({'background-color' : '#CFD8DC', color : 'black'});
-      $('#'+cat).css({'background-color' : '#607D8B', color : 'white'});
-      cat = 'Get';
-    } else if($(this).text() == 'Delete' && cat != 'Delete') {
+      $('#'+current.cur).css({'background-color' : '#607D8B', color : 'white'});
+      current.cur = 'Get';
+    } else if($(this).text() == 'Delete' && current.cur != 'Delete') {
       $('button').text('DELETE POST');
       $('.function p').remove();
       var html = ''
@@ -257,9 +257,9 @@ $(document).ready(function() {
       html += '</p>'
       $('.function').prepend(html)
       $('#Delete').css({'background-color' : '#CFD8DC', color : 'black'});
-      $('#'+cat).css({'background-color' : '#607D8B', color : 'white'});
-      cat = 'Delete';
-    } else if($(this).text() == 'Put' && cat != 'Put') {
+      $('#'+current.cur).css({'background-color' : '#607D8B', color : 'white'});
+      current.cur = 'Delete';
+    } else if($(this).text() == 'Put' && current.cur != 'Put') {
       $('button').text('UPDATE POST');
       $('.function p').remove();
       var html = ''
@@ -277,24 +277,24 @@ $(document).ready(function() {
       html += '</p>'
       $('.function').prepend(html)
       $('#Put').css({'background-color' : '#CFD8DC', color : 'black'});
-      $('#'+cat).css({'background-color' : '#607D8B', color : 'white'});
-      cat = 'Put';
+      $('#'+current.cur).css({'background-color' : '#607D8B', color : 'white'});
+      current.cur = 'Put';
     }
   });
 
   $(document).on('click','button',function() {
-    if(cat == 'Post') {
+    if(current.cur == 'Post') {
       var name = $('input')[0].value;
       var title = $('input')[1].value;
       var text = $('input')[2].value;
       current.add(name,title,text);
-    } else if(cat == 'Get') {
+    } else if(current.cur == 'Get') {
       if($('button').text() == 'RESET') {
         location.reload();
       } else {
         current.find($('input').val());
       }
-    } else if(cat == 'Put') {
+    } else if(current.cur == 'Put') {
       var name = $('input')[0].value;
       var title = $('input')[1].value;
       var text = $('input')[2].value;
